@@ -14,15 +14,6 @@ import (
 	"rpa-dfs-engine/internal/logger"
 )
 
-func IsProtocolRegistered() bool {
-	if runtime.GOOS != "windows" {
-		return false
-	}
-
-	cmd := exec.Command("reg", "query", `HKEY_CLASSES_ROOT\siteparser`, "/ve")
-	return cmd.Run() == nil
-}
-
 func RegisterProtocol() bool {
 	if runtime.GOOS != "windows" {
 		logger.LogError("Protocol registration only supported on Windows")
