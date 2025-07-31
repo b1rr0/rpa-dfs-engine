@@ -1,33 +1,36 @@
 package html
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
+	"rpa-dfs-engine/internal/logger"
 )
 
 func CreateHtmlInterface() {
 	exePath, err := os.Executable()
+	logger.LogInfo("Checking protocol registration")
+
+	logger.LogInfo("Facebook Auto Login started")
 	if err != nil {
-		fmt.Println("Error getting executable path:", err)
+		logger.LogError("Error getting executable path: %v", err)
 		return
 	}
 
 	exeDir := filepath.Dir(exePath)
-	templatePath := filepath.Join(filepath.Dir(exeDir), "src", "template.html")
+	templatePath := filepath.Join(filepath.Dir(exeDir), "web", "template.html")
 	htmlPath := filepath.Join(exeDir, "facebook-login.html")
 
 	htmlContent, err := os.ReadFile(templatePath)
 	if err != nil {
-		fmt.Println("Error reading template file:", err)
+		logger.LogError("Error reading template file: %v", err)
 		return
 	}
 
 	err = os.WriteFile(htmlPath, htmlContent, 0644)
 	if err != nil {
-		fmt.Println("Error creating HTML file:", err)
+		logger.LogError("Error creating HTML file: %v", err)
 		return
 	}
 
-	fmt.Printf("✅ HTML interface created: %s\n", htmlPath)
+	logger.LogSuccess("HTML interface created: %s", htmlPath)
 }

@@ -2,7 +2,6 @@ package cli
 
 import (
 	"flag"
-	"fmt"
 
 	"rpa-dfs-engine/internal/browser"
 	"rpa-dfs-engine/internal/fileutils"
@@ -25,8 +24,7 @@ func HandleCommandLine() {
 
 	if *username == "" || *password == "" {
 		logger.LogError("Login and password required")
-		fmt.Println("❌ Login and password required")
-		fmt.Println("💡 Use: facebook-login.exe -l LOGIN -p PASSWORD")
+		logger.LogInfo("💡 Use: facebook-login.exe -l LOGIN -p PASSWORD")
 		ShowHelp()
 		return
 	}
@@ -38,45 +36,42 @@ func HandleCommandLine() {
 
 	if err := fileutils.SaveBrowserResultToFile(result); err != nil {
 		logger.LogError("Error saving to file: %v", err)
-		fmt.Printf("❌ Error saving to file: %v\n", err)
 	}
 
 	if result.Success {
 		logger.LogSuccess("Facebook automation successful")
-		fmt.Printf("✅ Facebook automation successful!\n")
-		fmt.Printf("🌐 URL: %s\n", result.URL)
-		fmt.Printf("📝 Message: %s\n", result.Message)
+		logger.LogInfo("🌐 URL: %s", result.URL)
+		logger.LogInfo("📝 Message: %s", result.Message)
 	} else {
 		logger.LogError("Automation error: %s", result.Error)
-		fmt.Printf("❌ Error: %s\n", result.Error)
 	}
 }
 
 func ShowHelp() {
-	fmt.Println("🌐 Facebook Auto Login - Automatic Facebook Login")
-	fmt.Println("==================================================")
-	fmt.Println()
-	fmt.Println("Usage:")
-	fmt.Println("  facebook-login.exe -l LOGIN -p PASSWORD")
-	fmt.Println()
-	fmt.Println("Parameters:")
-	fmt.Println("  -l LOGIN     Facebook login (email)")
-	fmt.Println("  -p PASSWORD  Facebook password")
-	fmt.Println("  -h           Show this help")
-	fmt.Println()
-	fmt.Println("Examples:")
-	fmt.Println("  facebook-login.exe -l user@example.com -p mypassword")
-	fmt.Println("  facebook-login.exe -l john.doe@gmail.com -p secret123")
-	fmt.Println()
-	fmt.Println("Result:")
-	fmt.Println("  - Chrome browser will open")
-	fmt.Println("  - Automatically navigate to Facebook")
-	fmt.Println("  - Enter login and password")
-	fmt.Println("  - Click login button")
-	fmt.Println("  - Result saved to facebook_result_*.txt file")
-	fmt.Println()
-	fmt.Println("Requirements:")
-	fmt.Println("  - Google Chrome installed")
-	fmt.Println("  - Internet connection")
-	fmt.Println("  - Valid Facebook credentials")
+	logger.LogInfo("🌐 Facebook Auto Login - Automatic Facebook Login")
+	logger.LogInfo("==================================================")
+	logger.LogInfo("")
+	logger.LogInfo("Usage:")
+	logger.LogInfo("  facebook-login.exe -l LOGIN -p PASSWORD")
+	logger.LogInfo("")
+	logger.LogInfo("Parameters:")
+	logger.LogInfo("  -l LOGIN     Facebook login (email)")
+	logger.LogInfo("  -p PASSWORD  Facebook password")
+	logger.LogInfo("  -h           Show this help")
+	logger.LogInfo("")
+	logger.LogInfo("Examples:")
+	logger.LogInfo("  facebook-login.exe -l user@example.com -p mypassword")
+	logger.LogInfo("  facebook-login.exe -l john.doe@gmail.com -p secret123")
+	logger.LogInfo("")
+	logger.LogInfo("Result:")
+	logger.LogInfo("  - Chrome browser will open")
+	logger.LogInfo("  - Automatically navigate to Facebook")
+	logger.LogInfo("  - Enter login and password")
+	logger.LogInfo("  - Click login button")
+	logger.LogInfo("  - Result saved to facebook_result_*.txt file")
+	logger.LogInfo("")
+	logger.LogInfo("Requirements:")
+	logger.LogInfo("  - Google Chrome installed")
+	logger.LogInfo("  - Internet connection")
+	logger.LogInfo("  - Valid Facebook credentials")
 }

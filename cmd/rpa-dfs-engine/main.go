@@ -41,28 +41,26 @@ func main() {
 func handleFirstRun() {
 	logger.LogInfo("Checking protocol registration")
 	html.CreateHtmlInterface()
+	logger.LogInfo("Checking protocol registration")
 
 	if !protocol.IsProtocolRegistered() {
 		logger.LogInfo("Protocol not registered, starting registration")
-		fmt.Println("=== Facebook Auto Login - First Run ===")
-		fmt.Println("Registering siteparser:// protocol...")
+		logger.LogInfo("=== Facebook Auto Login - First Run ===")
+		logger.LogInfo("Registering siteparser:// protocol...")
 
 		if protocol.RegisterProtocol() {
 			logger.LogSuccess("Protocol registered successfully")
-			fmt.Println("✅ Protocol registered successfully!")
 			logger.LogSuccess("HTML interface created")
-			fmt.Println("✅ HTML interface created!")
-			fmt.Println("\nNow you can:")
-			fmt.Println("1. Open 'facebook-login.html' in browser")
-			fmt.Println("2. Use commands: facebook-login.exe -l LOGIN -p PASSWORD")
-			fmt.Println("3. Use protocol: siteparser://browser/?login=...&password=...")
+			logger.LogInfo("\nNow you can:")
+			logger.LogInfo("1. Open 'facebook-login.html' in browser")
+			logger.LogInfo("2. Use commands: facebook-login.exe -l LOGIN -p PASSWORD")
+			logger.LogInfo("3. Use protocol: siteparser://browser/?login=...&password=...")
 		} else {
 			logger.LogWarning("Failed to register protocol")
-			fmt.Println("⚠️ Failed to register protocol.")
-			fmt.Println("💡 To register protocol run: run-as-admin.bat")
-			fmt.Println("📄 Application will continue without protocol")
+			logger.LogInfo("💡 To register protocol run: run-as-admin.bat")
+			logger.LogInfo("📄 Application will continue without protocol")
 			logger.LogInfo("HTML interface already created")
-			fmt.Println("✅ HTML interface created!")
+			logger.LogSuccess("HTML interface created")
 		}
 	} else {
 		logger.LogInfo("Protocol already registered")

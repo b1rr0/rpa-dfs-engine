@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"rpa-dfs-engine/internal/logger"
 	"rpa-dfs-engine/internal/types"
 )
 
@@ -46,6 +47,6 @@ Message: %s
 		return fmt.Errorf("error writing to file: %v", err)
 	}
 
-	fmt.Printf("✅ Result saved to file: %s\n", filename)
+	logger.LogSuccess("Result saved to file: %s", filename)
 	return nil
 }
