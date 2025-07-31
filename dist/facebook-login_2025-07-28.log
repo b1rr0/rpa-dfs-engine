@@ -1,0 +1,15 @@
+2025/07/28 12:42:12 === SESSION START ===
+2025/07/28 12:42:12 Start time: 2025-07-28 12:42:12
+2025/07/28 12:42:12 Arguments: [D:\java\robot\go-robot\dist\facebook-login.exe siteparser://browser/?login=%D1%84%D0%BE%D1%8B%D0%BB%D0%B1%D1%80%D0%B2%D0%BE%D0%BB%D1%84%D1%8B%D1%80%D0%B2%D0%BE%D0%BB&password=%D1%84%D0%BE%D1%8B%D1%80%D0%B2%D0%BE%D0%BB%D1%84%D1%8B%D1%80%D0%B2%D0%BE%D0%BB]
+2025/07/28 12:42:12 Working directory: C:\Windows\system32
+2025/07/28 12:42:12 INFO: Facebook Auto Login started
+2025/07/28 12:42:12 INFO: Started via protocol: siteparser://browser/?login=%D1%84%D0%BE%D1%8B%D0%BB%D0%B1%D1%80%D0%B2%D0%BE%D0%BB%D1%84%D1%8B%D1%80%D0%B2%D0%BE%D0%BB&password=%D1%84%D0%BE%D1%8B%D1%80%D0%B2%D0%BE%D0%BB%D1%84%D1%8B%D1%80%D0%B2%D0%BE%D0%BB
+2025/07/28 12:42:12 INFO: Protocol parsing - path: /, params: map[login:[фоылбрволфырвол] password:[фоырволфырвол]]
+2025/07/28 12:42:12 INFO: Determined operation type: /browser
+2025/07/28 12:42:12 INFO: Facebook automation via protocol
+2025/07/28 12:42:12 INFO: Login: фоылбрволфырвол
+2025/07/28 12:42:12 INFO: Starting browser for Facebook
+2025/07/28 12:42:12 INFO: Login: фоылбрволфырвол
+2025/07/28 12:42:20 SUCCESS: Browser opened and data entered successfully
+2025/07/28 12:42:21 SUCCESS: Facebook automation successful
+2025/07/28 12:42:21 === SESSION END ===
