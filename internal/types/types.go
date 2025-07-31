@@ -1,4 +1,4 @@
-package main
+package types
 
 // BrowserResult представляет результат работы с браузером
 type BrowserResult struct {

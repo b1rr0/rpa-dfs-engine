@@ -1,4 +1,4 @@
-package main
+package html
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-func createHtmlInterface() {
+func CreateHtmlInterface() {
 	exePath, err := os.Executable()
 	if err != nil {
 		fmt.Println("Error getting executable path:", err)

@@ -1,4 +1,4 @@
-package main
+package logger
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 var logFile *os.File
 var logger *log.Logger
 
-func initLogger() error {
+func InitLogger() error {
 	exePath, err := os.Executable()
 	if err != nil {
 		return err
@@ -41,7 +41,7 @@ func initLogger() error {
 	return nil
 }
 
-func closeLogger() {
+func CloseLogger() {
 	if logger != nil {
 		logger.Println("=== SESSION END ===")
 	}

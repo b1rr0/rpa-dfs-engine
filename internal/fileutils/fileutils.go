@@ -1,13 +1,15 @@
-package main
+package fileutils
 
 import (
 	"fmt"
 	"os"
 	"path/filepath"
 	"time"
+
+	"rpa-dfs-engine/internal/types"
 )
 
-func saveBrowserResultToFile(result BrowserResult) error {
+func SaveBrowserResultToFile(result types.BrowserResult) error {
 	exePath, err := os.Executable()
 	if err != nil {
 		return fmt.Errorf("error getting executable path: %v", err)

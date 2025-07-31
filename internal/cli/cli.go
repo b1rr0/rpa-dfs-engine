@@ -1,11 +1,15 @@
-package main
+package cli
 
 import (
 	"flag"
 	"fmt"
+
+	"rpa-dfs-engine/internal/browser"
+	"rpa-dfs-engine/internal/fileutils"
+	"rpa-dfs-engine/internal/logger"
 )
 
-func handleCommandLine() {
+func HandleCommandLine() {
 	var (
 		username = flag.String("l", "", "Facebook login (email)")
 		password = flag.String("p", "", "Facebook password")
@@ -15,40 +19,40 @@ func handleCommandLine() {
 	flag.Parse()
 
 	if *help {
-		showHelp()
+		ShowHelp()
 		return
 	}
 
 	if *username == "" || *password == "" {
-		LogError("Login and password required")
+		logger.LogError("Login and password required")
 		fmt.Println("❌ Login and password required")
 		fmt.Println("💡 Use: facebook-login.exe -l LOGIN -p PASSWORD")
-		showHelp()
+		ShowHelp()
 		return
 	}
 
-	LogInfo("Starting Facebook automation")
-	LogInfo("Login: %s", *username)
+	logger.LogInfo("Starting Facebook automation")
+	logger.LogInfo("Login: %s", *username)
 
-	result := openBrowserWithLogin(*username, *password)
+	result := browser.OpenBrowserWithLogin(*username, *password)
 
-	if err := saveBrowserResultToFile(result); err != nil {
-		LogError("Error saving to file: %v", err)
+	if err := fileutils.SaveBrowserResultToFile(result); err != nil {
+		logger.LogError("Error saving to file: %v", err)
 		fmt.Printf("❌ Error saving to file: %v\n", err)
 	}
 
 	if result.Success {
-		LogSuccess("Facebook automation successful")
+		logger.LogSuccess("Facebook automation successful")
 		fmt.Printf("✅ Facebook automation successful!\n")
 		fmt.Printf("🌐 URL: %s\n", result.URL)
 		fmt.Printf("📝 Message: %s\n", result.Message)
 	} else {
-		LogError("Automation error: %s", result.Error)
+		logger.LogError("Automation error: %s", result.Error)
 		fmt.Printf("❌ Error: %s\n", result.Error)
 	}
 }
 
-func showHelp() {
+func ShowHelp() {
 	fmt.Println("🌐 Facebook Auto Login - Automatic Facebook Login")
 	fmt.Println("==================================================")
 	fmt.Println()

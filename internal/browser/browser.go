@@ -1,4 +1,4 @@
-package main
+package browser
 
 import (
 	"context"
@@ -9,18 +9,22 @@ import (
 	"runtime"
 	"time"
 
+	"rpa-dfs-engine/internal/config"
+	"rpa-dfs-engine/internal/logger"
+	"rpa-dfs-engine/internal/types"
+
 	"github.com/chromedp/chromedp"
 )
 
-func openBrowserWithLogin(username, password string) BrowserResult {
-	LogInfo("Starting browser for Facebook")
-	LogInfo("Login: %s", username)
+func OpenBrowserWithLogin(username, password string) types.BrowserResult {
+	logger.LogInfo("Starting browser for Facebook")
+	logger.LogInfo("Login: %s", username)
 
 	if !isChromeInstalled() {
-		LogError("Chrome not found")
-		return BrowserResult{
+		logger.LogError("Chrome not found")
+		return types.BrowserResult{
 			Success:   false,
-			URL:       FACEBOOK_URL,
+			URL:       config.FACEBOOK_URL,
 			Username:  username,
 			Error:     "Chrome not found",
 			Timestamp: time.Now().Unix(),
@@ -45,34 +49,34 @@ func openBrowserWithLogin(username, password string) BrowserResult {
 
 	var result string
 	err := chromedp.Run(taskCtx,
-		chromedp.Navigate(FACEBOOK_URL),
+		chromedp.Navigate(config.FACEBOOK_URL),
 		chromedp.Sleep(2*time.Second),
 
-		chromedp.SendKeys(FACEBOOK_LOGIN_SELECTOR, username),
+		chromedp.SendKeys(config.FACEBOOK_LOGIN_SELECTOR, username),
 		chromedp.Sleep(1*time.Second),
 
-		chromedp.SendKeys(FACEBOOK_PASSWORD_SELECTOR, password),
+		chromedp.SendKeys(config.FACEBOOK_PASSWORD_SELECTOR, password),
 		chromedp.Sleep(1*time.Second),
 
-		chromedp.Click(FACEBOOK_LOGIN_BUTTON_SELECTOR),
+		chromedp.Click(config.FACEBOOK_LOGIN_BUTTON_SELECTOR),
 		chromedp.Sleep(3*time.Second),
 
 		chromedp.Location(&result),
 	)
 
 	if err != nil {
-		LogError("Browser automation error: %v", err)
-		return BrowserResult{
+		logger.LogError("Browser automation error: %v", err)
+		return types.BrowserResult{
 			Success:   false,
-			URL:       FACEBOOK_URL,
+			URL:       config.FACEBOOK_URL,
 			Username:  username,
 			Error:     fmt.Sprintf("Automation error: %v", err),
 			Timestamp: time.Now().Unix(),
 		}
 	}
 
-	LogSuccess("Browser opened and data entered successfully")
-	return BrowserResult{
+	logger.LogSuccess("Browser opened and data entered successfully")
+	return types.BrowserResult{
 		Success:   true,
 		URL:       result,
 		Username:  username,

@@ -1,6 +1,6 @@
 @echo off
 echo ========================================
-echo    Building Facebook Auto Login
+echo    Building RPA DFS Engine
 echo ========================================
 echo.
 
@@ -18,18 +18,16 @@ go version
 
 echo.
 echo Initializing module and downloading dependencies...
-cd src
 go mod tidy
 
 echo.
 echo Building application for Windows...
 set GOOS=windows
 set GOARCH=amd64
-go build -ldflags="-s -w" -o ../dist/facebook-login.exe .
-cd ..
+go build -ldflags="-s -w" -o dist/rpa-dfs-engine.exe ./cmd/rpa-dfs-engine
 
 echo.
 echo Build completed!
-echo Executable file: dist/facebook-login.exe
+echo Executable file: dist/rpa-dfs-engine.exe
 echo.
 pause 

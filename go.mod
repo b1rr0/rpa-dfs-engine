@@ -1,4 +1,4 @@
-module site-parser
+module rpa-dfs-engine
 
 go 1.21
 
