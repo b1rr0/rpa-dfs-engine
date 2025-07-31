@@ -37,7 +37,12 @@
         <div class="content">
             <div class="info">
                 <h3><i class="fas fa-check-circle"></i> Protocol registered!</h3>
-                <p>Protocol <code>siteparser://</code> successfully registered in system.</p>
+                <p>Protocol <code>#PROTOCOL_NAME#://</code> successfully registered in system.</p>
+            </div>
+
+            <div class="info">
+                <h3><i class="fas fa-vial"></i> Testing Protocol</h3>
+                <p>To check if the protocol is working, press the <strong>TEST</strong> button below. After the test, a website should open. If it opens successfully, you can close it - that means the protocol works correctly!</p>
             </div>
 
             <form id="rpaForm">
@@ -67,7 +72,7 @@
     </div>
 
     <script>
-        function showResult(message, type = 'info') {
+            function showResult(message, type = 'info') {
             const resultDiv = document.getElementById('result');
             const resultContent = document.getElementById('resultContent');
             resultContent.innerHTML = '<div class="' + type + '"><h3><i class="fas fa-spinner fa-spin"></i> ' + message + '</h3><p>Application starting via protocol. Result will be saved to text file next to executable.</p></div>';
@@ -83,14 +88,14 @@
                 return;
             }
             
-            const protocolUrl = 'siteparser://browser/?email=' + encodeURIComponent(email) + 
+            const protocolUrl = '#PROTOCOL_NAME#://browser/?email=' + encodeURIComponent(email) + 
                                '&token=' + encodeURIComponent(token);
             showResult('Sending RPA request with email and token...', 'success');
             window.location.href = protocolUrl;
         });
         
         document.getElementById('testBtn').addEventListener('click', function() {
-            const protocolUrl = 'siteparser://browser/?isTest=true';
+            const protocolUrl = '#PROTOCOL_NAME#://browser/?isTest=true';
             showResult('Running RPA test...', 'success');
             window.location.href = protocolUrl;
         });

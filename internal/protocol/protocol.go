@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"rpa-dfs-engine/internal/browser"
+	"rpa-dfs-engine/internal/config"
 	"rpa-dfs-engine/internal/fileutils"
 	"rpa-dfs-engine/internal/logger"
 )
@@ -35,9 +36,9 @@ func RegisterProtocol() bool {
 	logger.LogInfo("Executable path: %s", exePath)
 
 	commands := [][]string{
-		{"reg", "add", `HKEY_CLASSES_ROOT\siteparser`, "/ve", "/d", "URL:Facebook Auto Login Protocol", "/f"},
-		{"reg", "add", `HKEY_CLASSES_ROOT\siteparser`, "/v", "URL Protocol", "/d", "", "/f"},
-		{"reg", "add", `HKEY_CLASSES_ROOT\siteparser\shell\open\command`, "/ve", "/d", fmt.Sprintf(`"%s" "%%1"`, exePath), "/f"},
+		{"reg", "add", `HKEY_CLASSES_ROOT\` + config.PROTOCOL_NAME, "/ve", "/d", "URL:Scrooge PRotocol", "/f"},
+		{"reg", "add", `HKEY_CLASSES_ROOT\` + config.PROTOCOL_NAME, "/v", "URL Protocol", "/d", "", "/f"},
+		{"reg", "add", `HKEY_CLASSES_ROOT\` + config.PROTOCOL_NAME + `\shell\open\command`, "/ve", "/d", fmt.Sprintf(`"%s" "%%1"`, exePath), "/f"},
 	}
 
 	logger.LogInfo("Executing protocol registration commands...")
@@ -92,7 +93,7 @@ func HandleProtocolLaunch(protocolURL string) {
 
 		if username == "" || password == "" {
 			logger.LogError("Login or password not specified in protocol")
-			logger.LogInfo("Use: siteparser://browser/?login=...&password=...")
+			logger.LogInfo("Use: %s://browser/?login=...&password=...", config.PROTOCOL_NAME)
 			return
 		}
 
@@ -114,7 +115,7 @@ func HandleProtocolLaunch(protocolURL string) {
 	} else {
 		logger.LogError("Invalid protocol format: %s", path)
 		logger.LogInfo("Use:")
-		logger.LogInfo("  siteparser://browser/?login=...&password=...")
-		logger.LogInfo("  siteparser://test")
+		logger.LogInfo("  %s://browser/?login=...&password=...", config.PROTOCOL_NAME)
+		logger.LogInfo("  %s://test", config.PROTOCOL_NAME)
 	}
 }
