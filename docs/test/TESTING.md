@@ -150,6 +150,18 @@ func TestBrowserAutomation_WhenTimeoutOccurs_ReturnsTimeoutError(t *testing.T) {
 }
 ```
 
+## 📋 **Test Naming Convention**
+
+All tests follow the **Subject/Scenario/Result** pattern:
+
+```go
+func TestSubject_WithScenario_ExpectedResult(t *testing.T) {
+    // Arrange
+    // Act  
+    // Assert
+}
+```
+
 ## 📋 **Best Practices Summary**
 
 ### ✅ **DO:**
@@ -166,6 +178,49 @@ func TestBrowserAutomation_WhenTimeoutOccurs_ReturnsTimeoutError(t *testing.T) {
 - **Create interdependent tests** - Tests shouldn't rely on execution order
 - **Test implementation details** - Test behavior, not internal structure
 - **Make unnecessary assertions** - Only assert what you're specifically testing
+
+## 🎨 **Testing Patterns Used**
+
+### **1. Arrange-Act-Assert (AAA)**
+```go
+func TestExample(t *testing.T) {
+    // Arrange
+    input := "test data"
+    
+    // Act
+    result := ProcessInput(input)
+    
+    // Assert
+    assert.Equal(t, "expected", result)
+}
+```
+
+### **2. Table-Driven Tests**
+```go
+tests := []struct {
+    name     string
+    input    string
+    expected string
+}{
+    {"valid input", "test", "expected"},
+    {"empty input", "", "default"},
+}
+
+for _, tt := range tests {
+    t.Run(tt.name, func(t *testing.T) {
+        result := ProcessInput(tt.input)
+        assert.Equal(t, tt.expected, result)
+    })
+}
+```
+
+### **3. Error Testing**
+```go
+func TestFunction_WithInvalidInput_ReturnsError(t *testing.T) {
+    _, err := ProcessInvalidInput("bad")
+    assert.Error(t, err)
+    assert.Contains(t, err.Error(), "expected error message")
+}
 
 ## 🔗 **Related Documentation**
 

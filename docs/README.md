@@ -73,15 +73,41 @@ docs/
 - Coverage reporting and benchmarking
 - Performance testing strategies
 
-### [🚀 RPA Testing Strategies](test/RPA_TESTING_STRATEGIES.md)
-**Desktop automation testing approaches** specific to RPA workflows.
+## 🚀 **Running Tests**
 
-**What you'll find:**
-- RPA testing pyramid
-- Browser automation testing patterns
-- Cross-platform testing strategies
-- Performance and load testing
-- CI/CD pipeline integration
+### **All Tests**
+```bash
+# Run all tests
+go test ./test/...
+
+# With verbose output  
+go test -v ./test/...
+
+# With coverage report
+go test -cover ./test/...
+```
+
+### **Specific Test Suites**
+```bash
+# Unit tests only
+go test ./test/unit/
+
+# Integration tests only  
+go test ./test/integration/
+
+# Specific test file
+go test ./test/unit/types_test.go
+```
+
+### **Individual Tests**
+```bash
+# Run specific test function
+go test -run TestBrowserResult_WithSuccessfulResult ./test/unit/
+
+# Run tests matching pattern
+go test -run TestProtocol ./test/unit/
+```
+
 
 ## 📚 Go Standards Documentation
 
