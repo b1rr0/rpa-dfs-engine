@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"rpa-dfs-engine/internal/html"
 	"rpa-dfs-engine/internal/logger"
 	"rpa-dfs-engine/internal/protocol"
+	"rpa-dfs-engine/internal/templates"
 )
 
 // SetupHandler handles the setup/first-run functionality
@@ -19,7 +19,7 @@ func (h *SetupHandler) Execute() error {
 	logger.LogInfo("=== RPA DFS Engine - Setup Mode ===")
 	logger.LogInfo("Checking protocol registration")
 
-	html.CreateHtmlInterface()
+	templates.CreateHtmlInterface()
 
 	logger.LogInfo("Registering siteparser:// protocol...")
 

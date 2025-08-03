@@ -9,7 +9,7 @@ import (
 	"rpa-dfs-engine/internal/logger"
 )
 
-const protocolPrefix = config.PROTOCOL_NAME + "://"
+var protocolPrefix = config.PROTOCOL_NAME + "://"
 
 func GetHandler() Handler {
 	args := os.Args

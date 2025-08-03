@@ -13,6 +13,11 @@
 *.dylib
 go-robot
 go-robot.exe
+rpa-dfs-engine
+rpa-dfs-engine.exe
+
+# Distribution/build output
+dist/
 
 # Test binary, built with `go test -c`
 *.test
