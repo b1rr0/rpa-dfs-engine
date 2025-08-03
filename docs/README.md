@@ -6,8 +6,10 @@ Welcome to the Go Robot project documentation! This directory contains all the d
 
 ```
 docs/
-├── README.md                    # This file - main documentation index
-└── go-standards/               # Go project layout standards and guidelines
+├── README.md                           # This file - main documentation index
+├── BROWSER_INTERACTION_GUIDELINES.md  # Browser automation standards and guidelines
+├── PROJECT_STRUCTURE_ANALYSIS.md      # Project structure analysis
+└── go-standards/                       # Go project layout standards and guidelines
     ├── GO_PROJECT_LAYOUT_RULES.md      # Complete Go layout rules
     ├── GO_LAYOUT_QUICK_REFERENCE.md    # Quick reference cheat sheet
     └── GO_LAYOUT_MIGRATION_GUIDE.md    # Migration guide for existing projects
@@ -22,6 +24,18 @@ docs/
 ### For Existing Projects
 1. Review the [Migration Guide](go-standards/GO_LAYOUT_MIGRATION_GUIDE.md)
 2. Follow the step-by-step instructions to restructure your project
+
+## 🤖 Browser Automation Guidelines
+
+### [🌐 Browser Interaction Guidelines](BROWSER_INTERACTION_GUIDELINES.md)
+**Essential guidelines** for all browser automation within the RPA DFS Engine.
+
+**What you'll find:**
+- Mandatory use of `internal/browser` package
+- Standard browser automation patterns
+- ChromeDP configuration best practices
+- Error handling and result patterns
+- Do's and don'ts for browser interactions
 
 ## 📚 Go Standards Documentation
 
@@ -57,8 +71,9 @@ docs/
 
 ### For Development Team
 1. **Before starting a new Go project**: Read the layout rules
-2. **During development**: Keep the quick reference handy
-3. **When refactoring**: Use the migration guide
+2. **Before implementing browser automation**: Read the browser interaction guidelines
+3. **During development**: Keep the quick reference handy
+4. **When refactoring**: Use the migration guide
 
 ### For Code Reviews
 - Ensure new projects follow the standard layout
