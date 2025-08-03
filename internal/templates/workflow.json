@@ -1,0 +1,34 @@
+{
+  "graph": {
+    "nodeType": "moveToPage",
+    "url": "{{user.website}}",
+    "next": {
+      "nodeType": "wait",
+      "duration": 2000,
+      "next": {
+        "nodeType": "fillField",
+        "selector": "{{user.emailSelector}}",
+        "value": "{{user.email}}",
+        "next": {
+          "nodeType": "fillField",
+          "selector": "{{user.passwordSelector}}",
+          "value": "{{user.password}}",
+          "next": {
+            "nodeType": "clickButton",
+            "selector": "{{user.loginButtonSelector}}",
+            "next": {
+              "nodeType": "wait",
+              "duration": 3000,
+              "next": null
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "name": "Default Process Workflow",
+    "version": "1.0.0",
+    "description": "Simple login workflow for process handler"
+  }
+} 

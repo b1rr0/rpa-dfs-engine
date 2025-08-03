@@ -1,79 +1,38 @@
 package handlers
 
 import (
-	"context"
 	"fmt"
-	"io"
-	"log"
-	"strings"
-	"time"
 
+	"rpa-dfs-engine/internal/browser"
 	"rpa-dfs-engine/internal/config"
 	"rpa-dfs-engine/internal/logger"
-
-	"github.com/chromedp/chromedp"
 )
 
 type TestHandler struct {
-	url               string
-	navigationTimeout time.Duration
-	displayDuration   time.Duration
+	url     string
+	browser *browser.Automation
 }
 
 func NewTestHandler() Handler {
 	return &TestHandler{
-		url:               config.SITE_FOR_TEST,
-		navigationTimeout: 7777777777 * time.Second,
+		url: config.SITE_FOR_TEST,
 	}
 }
 
 func (h *TestHandler) Execute() error {
-	originalOutput := log.Writer()
-	log.SetOutput(&cookieErrorFilter{originalOutput})
-	defer log.SetOutput(originalOutput)
-
 	logger.LogInfo("=== RPA DFS Engine - Test Mode ===")
 	logger.LogInfo("Opening test website: %s", h.url)
 
-	opts := append(
-		chromedp.DefaultExecAllocatorOptions[:],
-		chromedp.Flag("headless", false),
-		chromedp.Flag("disable-gpu", false),
-		chromedp.Flag("disable-web-security", true),
-		chromedp.Flag("disable-features", "VizDisplayCompositor,NetworkService,CookieStore,NavigationThreadingOptimizations"),
-		chromedp.Flag("disable-background-timer-throttling", true),
-		chromedp.Flag("disable-backgrounding-occluded-windows", true),
-		chromedp.Flag("disable-renderer-backgrounding", true),
-		chromedp.Flag("disable-dev-shm-usage", true),
-		chromedp.Flag("no-sandbox", true),
-		chromedp.Flag("ignore-certificate-errors", true),
-		chromedp.Flag("ignore-ssl-errors", true),
-		chromedp.Flag("ignore-certificate-errors-spki-list", true),
-		chromedp.Flag("ignore-certificate-errors-ssl-version-fallback-min", true),
-		chromedp.Flag("disable-cookies", true),
-		chromedp.Flag("disable-local-storage", true),
-		chromedp.Flag("disable-session-storage", true),
-		chromedp.Flag("disable-extensions", true),
-		chromedp.Flag("disable-plugins", true),
-		chromedp.Flag("disable-default-apps", true),
-		chromedp.Flag("disable-background-networking", true),
-		chromedp.Flag("disable-client-side-phishing-detection", true),
-		chromedp.Flag("disable-sync", true),
-		chromedp.Flag("disable-hang-monitor", true),
-		chromedp.Flag("disable-prompt-on-repost", true),
-		chromedp.Flag("disable-domain-reliability", true),
-	)
+	// Initialize browser automation
+	h.browser = browser.NewAutomation()
+	if h.browser == nil {
+		logger.LogError("Failed to initialize browser automation")
+		return fmt.Errorf("browser initialization failed")
+	}
+	defer h.browser.Close()
 
-	allocCtx, cancelAlloc := chromedp.NewExecAllocator(context.Background(), opts...)
-	defer cancelAlloc()
-
-	ctx, cancelCtx := chromedp.NewContext(allocCtx)
-	defer cancelCtx()
-
-	ctxTimeout, cancelTimeout := context.WithTimeout(ctx, h.navigationTimeout)
-	defer cancelTimeout()
-
-	if err := h.navigateToWebsite(ctxTimeout); err != nil {
+	// Navigate to the test website
+	if err := h.browser.NavigateTo(h.url); err != nil {
 		logger.LogError("Failed to navigate to website: %v", err)
 		return fmt.Errorf("website navigation failed: %w", err)
 	}
@@ -81,68 +40,89 @@ func (h *TestHandler) Execute() error {
 	logger.LogSuccess("Successfully navigated to test website")
 	logger.LogInfo("Press ENTER in the console to navigate to the next link...")
 
+	// Wait for user input
 	fmt.Print("Press ENTER to continue to the next link...")
 	_, _ = fmt.Scanln()
 
+	// Navigate to the next website
 	nextURL := "https://example.com/"
 	logger.LogInfo("Navigating to next website: %s", nextURL)
-	if err := chromedp.Run(ctxTimeout,
-		chromedp.Navigate(nextURL),
-		chromedp.WaitVisible("body", chromedp.ByQuery),
-	); err != nil {
+
+	if err := h.browser.NavigateTo(nextURL); err != nil {
 		logger.LogError("Failed to navigate to next website: %v", err)
 		return fmt.Errorf("next website navigation failed: %w", err)
 	}
+
 	logger.LogSuccess("Successfully navigated to next website")
+	logger.LogInfo("Browser will remain open. Close the browser window to exit.")
 
-	logger.LogInfo("Waiting for browser window to close...")
+	// Wait for user to close browser manually
+	fmt.Print("Close the browser window to exit the program...")
+	_, _ = fmt.Scanln()
 
-	<-ctx.Done()
-
-	logger.LogInfo("Browser window closed. Exiting program.")
+	logger.LogInfo("Test handler execution completed")
 	return nil
 }
 
 func (h *TestHandler) GetDescription() string {
-	return "Opens test websites using Chrome automation for RPA engine testing"
+	return "Opens test websites using browser automation for RPA engine testing"
 }
 
+// SetURL allows customizing the test URL
 func (h *TestHandler) SetURL(url string) {
 	if url != "" {
 		h.url = url
 	}
 }
 
-// SetNavigationTimeout allows customizing the navigation timeout.
-func (h *TestHandler) SetNavigationTimeout(timeout time.Duration) {
-	if timeout > 0 {
-		h.navigationTimeout = timeout
+// NavigateToMultipleSites can be used to test navigation to multiple sites
+func (h *TestHandler) NavigateToMultipleSites(urls []string) error {
+	if h.browser == nil {
+		return fmt.Errorf("browser not initialized")
 	}
-}
 
-// navigateToWebsite handles the Chrome automation for website navigation.
-func (h *TestHandler) navigateToWebsite(ctx context.Context) error {
-	return chromedp.Run(ctx,
-		chromedp.Navigate(h.url),
-		chromedp.WaitVisible("body", chromedp.ByQuery),
-	)
-}
+	for i, url := range urls {
+		logger.LogInfo("Navigating to site %d/%d: %s", i+1, len(urls), url)
 
-// cookieErrorFilter фильтрует ошибки связанные с cookie парсингом
-type cookieErrorFilter struct {
-	writer io.Writer
-}
+		if err := h.browser.NavigateTo(url); err != nil {
+			logger.LogError("Failed to navigate to %s: %v", url, err)
+			return err
+		}
 
-func (f *cookieErrorFilter) Write(p []byte) (n int, err error) {
-	message := string(p)
-	// Фильтруем ошибки связанные с cookie парсингом и навигацией
-	if (strings.Contains(message, "could not unmarshal event") &&
-		(strings.Contains(message, "cookiePart") || strings.Contains(message, "partitionKey"))) ||
-		strings.Contains(message, "unknown ClientNavigationReason value") ||
-		strings.Contains(message, "initialFrameNavigation") {
-		// Игнорируем эти ошибки
-		return len(p), nil
+		logger.LogSuccess("Successfully loaded: %s", url)
+
+		if i < len(urls)-1 {
+			fmt.Printf("Press ENTER to continue to next site (%d/%d)...", i+2, len(urls))
+			_, _ = fmt.Scanln()
+		}
 	}
-	// Пропускаем остальные сообщения
-	return f.writer.Write(p)
+
+	return nil
+}
+
+// TestFormInteraction demonstrates form filling capabilities
+func (h *TestHandler) TestFormInteraction() error {
+	if h.browser == nil {
+		return fmt.Errorf("browser not initialized")
+	}
+
+	logger.LogInfo("Testing form interaction capabilities")
+
+	// Example form interactions (would need actual form elements)
+	testData := map[string]string{
+		"#email":   "test@example.com",
+		"#name":    "Test User",
+		"#message": "This is a test message",
+	}
+
+	for selector, value := range testData {
+		logger.LogInfo("Attempting to fill field: %s", selector)
+		if err := h.browser.FillField(selector, value); err != nil {
+			logger.LogWarning("Could not fill field %s (element may not exist): %v", selector, err)
+		} else {
+			logger.LogSuccess("Successfully filled field: %s", selector)
+		}
+	}
+
+	return nil
 }

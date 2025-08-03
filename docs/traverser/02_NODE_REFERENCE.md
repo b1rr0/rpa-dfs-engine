@@ -189,30 +189,35 @@ Execute nodes in order.
 - `next` (node|null): Node after sequence
 
 ### **forEach**
-Ask user and iterate.
+Iterate over data array and execute node for each item.
 
 ```json
 {
   "nodeType": "forEach",
-  "dataSource": "{{user.items}}",
-  "questionText": "Process item {{iterator.count}}?",
+  "dataSourceIteratorParam": "currentItem",
   "next": {
     "nodeType": "fillField",
-    "selector": "#item-name",
-    "value": "Item {{iterator.index}}"
+    "selector": "#item-field",
+    "value": "{{currentItem}}"
   }
 }
 ```
 
 **Properties:**
-- `dataSource` (string): Array to iterate
-- `questionText` (string): Question for each item
-- `next` (node): Node to execute per item
+- `dataSourceIteratorParam` (string): Context key containing array to iterate over
+- `next` (node): Node to execute for each item
 
-**Iterator Variables:**
-- `{{iterator.index}}` - Current index (0-based)
-- `{{iterator.count}}` - Current count (1-based)  
-- `{{iterator.total}}` - Total items
+**How it works:**
+1. Retrieves array from context using `dataSourceIteratorParam` key
+2. For each item in the array:
+   - Sets the current item as the value of `dataSourceIteratorParam` in context
+   - Executes the `next` node with the current item available
+3. Cleans up by setting `dataSourceIteratorParam` to null
+4. Continues to next node after loop completion
+
+**Context Usage:**
+- The array must be pre-loaded in the user context with the key specified in `dataSourceIteratorParam`
+- During iteration, each array item becomes accessible via `{{dataSourceIteratorParam}}`
 
 ## ⏰ **Utility Nodes**
 
@@ -243,10 +248,10 @@ Pause execution.
 "value": "{{user.email}}"
 ```
 
-### **Iterator Variables** 
+### **Dynamic Data Variables**
 ```json
-"value": "Item {{iterator.index}}"
-"questionText": "Process {{iterator.count}} of {{iterator.total}}?"
+"value": "{{dataSourceIteratorParam}}"
+"filePath": "{{currentItem}}"
 ```
 
 ## 🎯 **Examples**
@@ -302,19 +307,20 @@ Pause execution.
 }
 ```
 
-### **ForEach with User Question**
+### **ForEach Data Iteration**
 ```json
 {
   "nodeType": "forEach",
-  "dataSource": "{{user.documents}}",
-  "questionText": "Upload document {{iterator.count}}?",
+  "dataSourceIteratorParam": "documentPath",
   "next": {
     "nodeType": "sendFile",
     "selector": "input[type='file']",
-    "filePath": "{{user.documents[iterator.index]}}"
+    "filePath": "{{documentPath}}"
   }
 }
 ```
+
+**Note:** The `documentPath` array must be pre-loaded in the user context. During execution, each document path becomes available as `{{documentPath}}`.
 
 ### **Conditional Branch**
 ```json
