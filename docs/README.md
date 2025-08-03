@@ -9,6 +9,10 @@ docs/
 ├── README.md                           # This file - main documentation index
 ├── BROWSER_INTERACTION_GUIDELINES.md  # Browser automation standards and guidelines
 ├── PROJECT_STRUCTURE_ANALYSIS.md      # Project structure analysis
+├── test/                               # Testing documentation and best practices
+│   ├── TESTING.md                       # Main testing guide
+│   ├── UNIT_TESTING_BEST_PRACTICES.md # Detailed unit testing principles
+│   ├── GO_TESTING_GUIDE.md            # Go-specific testing techniques
 └── go-standards/                       # Go project layout standards and guidelines
     ├── GO_PROJECT_LAYOUT_RULES.md      # Complete Go layout rules
     ├── GO_LAYOUT_QUICK_REFERENCE.md    # Quick reference cheat sheet
@@ -36,6 +40,48 @@ docs/
 - ChromeDP configuration best practices
 - Error handling and result patterns
 - Do's and don'ts for browser interactions
+
+## 🧪 Testing Documentation
+
+### [📋 Testing Guide](test/README.md)
+**Comprehensive testing strategy** for the RPA DFS Engine desktop application.
+
+**What you'll find:**
+- Testing philosophy: TDD as a design process
+- RPA-specific testing approaches
+- Unit vs Integration vs E2E testing strategies
+- Mock patterns for browser automation
+- Cross-platform testing considerations
+
+### [⚡ Unit Testing Best Practices](test/UNIT_TESTING_BEST_PRACTICES.md)
+**Detailed principles** based on [Steve Sanderson's testing guide](https://gist.github.com/vadymhimself/763e96dd8495bb77325efd082e63c9f5).
+
+**What you'll find:**
+- The six golden rules of unit testing
+- Good vs bad test examples
+- RPA-specific testing patterns
+- Common anti-patterns to avoid
+- Testing checklist and guidelines
+
+### [🔧 Go Testing Guide](test/GO_TESTING_GUIDE.md)
+**Practical Go testing techniques** for desktop RPA automation.
+
+**What you'll find:**
+- Go testing framework usage
+- Mocking patterns and interfaces
+- Test file organization
+- Coverage reporting and benchmarking
+- Performance testing strategies
+
+### [🚀 RPA Testing Strategies](test/RPA_TESTING_STRATEGIES.md)
+**Desktop automation testing approaches** specific to RPA workflows.
+
+**What you'll find:**
+- RPA testing pyramid
+- Browser automation testing patterns
+- Cross-platform testing strategies
+- Performance and load testing
+- CI/CD pipeline integration
 
 ## 📚 Go Standards Documentation
 
@@ -72,16 +118,24 @@ docs/
 ### For Development Team
 1. **Before starting a new Go project**: Read the layout rules
 2. **Before implementing browser automation**: Read the browser interaction guidelines
-3. **During development**: Keep the quick reference handy
-4. **When refactoring**: Use the migration guide
+3. **Before writing code**: Read the testing best practices and use TDD
+4. **During development**: Keep the quick reference and testing guide handy
+5. **When refactoring**: Use the migration guide and maintain test coverage
 
 ### For Code Reviews
 - Ensure new projects follow the standard layout
+- Verify browser interactions use `internal/browser` package
+- Check that new code includes appropriate unit tests
+- Validate test naming follows Subject/Scenario/Result pattern
+- Ensure external dependencies are properly mocked
 - Reference these documents when suggesting improvements
-- Check that directory structure matches the standards
 
 ### For CI/CD
 - Include structure validation in your build pipeline
+- Run unit tests on every commit with coverage reporting
+- Execute integration tests in the pipeline
+- Use cross-platform testing matrix (Windows, macOS, Linux)
+- Enforce minimum test coverage thresholds
 - Use the migration scripts as templates for automation
 
 ## 📋 Development Workflow
