@@ -9,6 +9,8 @@ docs/
 ├── README.md                           # This file - main documentation index
 ├── BROWSER_INTERACTION_GUIDELINES.md  # Browser automation standards and guidelines
 ├── PROJECT_STRUCTURE_ANALYSIS.md      # Project structure analysis
+├── traverser/                          # Workflow traverser documentation
+│   └── 02_NODE_REFERENCE.md            # Complete node reference guide
 ├── test/                               # Testing documentation and best practices
 │   ├── TESTING.md                       # Main testing guide
 │   ├── UNIT_TESTING_BEST_PRACTICES.md # Detailed unit testing principles
@@ -40,6 +42,18 @@ docs/
 - ChromeDP configuration best practices
 - Error handling and result patterns
 - Do's and don'ts for browser interactions
+
+## 🔄 Workflow Traverser Documentation
+
+### [📋 Node Reference Guide](traverser/02_NODE_REFERENCE.md)
+**Complete reference** for all workflow node types and their usage.
+
+**What you'll find:**
+- Single action node patterns (one node = one action)
+- Control flow nodes (conditional, sequence, forEach)
+- Action nodes (moveToPage, fillField, clickButton, sendFile)
+- Template system for dynamic data
+- Examples and best practices
 
 ## 🧪 Testing Documentation
 

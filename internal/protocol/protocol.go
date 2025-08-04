@@ -2,16 +2,13 @@ package protocol
 
 import (
 	"fmt"
-	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
 
-	"rpa-dfs-engine/internal/browser"
 	"rpa-dfs-engine/internal/config"
-	"rpa-dfs-engine/internal/fileutils"
 	"rpa-dfs-engine/internal/logger"
 )
 
@@ -58,64 +55,4 @@ func RegisterProtocol() bool {
 
 	logger.LogSuccess("Protocol registered successfully")
 	return true
-}
-
-func HandleProtocolLaunch(protocolURL string) {
-	logger.LogInfo("Started via protocol: %s", protocolURL)
-
-	u, err := url.Parse(protocolURL)
-	if err != nil {
-		logger.LogError("URL parsing error: %v", err)
-		return
-	}
-
-	path := u.Path
-	query := u.Query()
-
-	logger.LogInfo("Protocol parsing - path: %s, params: %v", path, query)
-
-	if path == "/test" {
-		logger.LogSuccess("Protocol test successful")
-		logger.LogInfo("Application ready to work")
-		return
-	}
-
-	if path == "" || path == "/" {
-		if query.Get("login") != "" || query.Get("password") != "" {
-			path = "/browser"
-			logger.LogInfo("Determined operation type: %s", path)
-		}
-	}
-
-	if path == "/browser" {
-		username := query.Get("login")
-		password := query.Get("password")
-
-		if username == "" || password == "" {
-			logger.LogError("Login or password not specified in protocol")
-			logger.LogInfo("Use: %s://browser/?login=...&password=...", config.PROTOCOL_NAME)
-			return
-		}
-
-		logger.LogInfo("Facebook automation via protocol")
-		logger.LogInfo("Login: %s", username)
-
-		result := browser.OpenBrowserWithLogin(username, password)
-
-		if err := fileutils.SaveBrowserResultToFile(result); err != nil {
-			logger.LogError("Error saving result: %v", err)
-		}
-
-		if result.Success {
-			logger.LogSuccess("Facebook automation successful")
-			logger.LogInfo("📝 Message: %s", result.Message)
-		} else {
-			logger.LogError("Automation error: %s", result.Error)
-		}
-	} else {
-		logger.LogError("Invalid protocol format: %s", path)
-		logger.LogInfo("Use:")
-		logger.LogInfo("  %s://browser/?login=...&password=...", config.PROTOCOL_NAME)
-		logger.LogInfo("  %s://test", config.PROTOCOL_NAME)
-	}
 }
